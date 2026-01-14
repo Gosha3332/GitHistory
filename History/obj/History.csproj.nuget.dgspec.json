@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Георгий\\source\\repos\\History\\History\\History.csproj": {}
+    "C:\\Users\\Георгий\\source\\repos\\GitHistory\\History\\History.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Георгий\\source\\repos\\History\\History\\History.csproj": {
+    "C:\\Users\\Георгий\\source\\repos\\GitHistory\\History\\History.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Георгий\\source\\repos\\History\\History\\History.csproj",
+        "projectUniqueName": "C:\\Users\\Георгий\\source\\repos\\GitHistory\\History\\History.csproj",
         "projectName": "History",
-        "projectPath": "C:\\Users\\Георгий\\source\\repos\\History\\History\\History.csproj",
+        "projectPath": "C:\\Users\\Георгий\\source\\repos\\GitHistory\\History\\History.csproj",
         "packagesPath": "C:\\Users\\Георгий\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Георгий\\source\\repos\\History\\History\\obj\\",
+        "outputPath": "C:\\Users\\Георгий\\source\\repos\\GitHistory\\History\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Георгий\\AppData\\Roaming\\NuGet\\NuGet.Config",
