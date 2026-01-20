@@ -8,14 +8,20 @@ app.MapGet("/getRepositoryGit/{owner}/{repo}", async (string owner, string repo)
     try
     {
         HttpResponseMessage resultJson = await client.GetAsync($"https://api.github.com/user?access_token={token}/{owner}/{repo}");
-        if (resultJson != null)
+        if (!resultJson.IsSuccessStatusCode) //Проверка на обработку запроса
         {
-            GitRepository repository = new GitRepository
-            (
-                $"https://api.github.com/user?access_token={token}/{owner}/{repo}"
-            );
+            if (resultJson.StatusCode != System.Net.HttpStatusCode.NotFound)//проверка на нахождение реозитория
+            {
+                GitRepository repository = new GitRepository
+                (
+                    $"https://api.github.com/user?access_token={token}/{owner}/{repo}"
+                );
+
+                //Здесь у меня будет возвращатся обработанная инфа репозитория
+            }
+            else { return "Такого репозитория нет"; }
         }
-        else { return "Такого репозитория нету"; }
+        else { return "Запрос не обработан"; }
     }
     catch (Exception e) { Console.WriteLine(e); }
     return null;

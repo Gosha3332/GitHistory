@@ -8,4 +8,7 @@
     public List<(DateTime Date, int CommitCount)> HistoryCommit { get; private set; }
 
     public GitRepository(string Url) { this.Url = Url; }
+
+
+    public void PaintGrafic() { }
 }
