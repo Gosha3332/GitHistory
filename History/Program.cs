@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
@@ -5,16 +7,21 @@ app.MapGet("/getRepositoryGit/{owner}/{repo}", async (string owner, string repo)
 {
     string token = "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";
     HttpClient client = new HttpClient();
+    client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("token", token);
     try
     {
-        HttpResponseMessage resultJson = await client.GetAsync($"https://api.github.com/user?access_token={token}/{owner}/{repo}");
-        if (!resultJson.IsSuccessStatusCode) //ѕроверка на обработку запроса
+        HttpResponseMessage result = await client.GetAsync($"https://api.github.com/{owner}/{repo}");
+        if (!result.IsSuccessStatusCode) //ѕроверка на обработку запроса
         {
-            if (resultJson.StatusCode != System.Net.HttpStatusCode.NotFound)//проверка на нахождение реозитори€
+            if (result.StatusCode != System.Net.HttpStatusCode.NotFound)//проверка на нахождение реозитори€
             {
+                string json = await result.Content.ReadAsStringAsync();
+
+                Dictionary<string, object> deserializeJson = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
+
                 GitRepository repository = new GitRepository
                 (
-                    $"https://api.github.com/user?access_token={token}/{owner}/{repo}"
+                    $"https://api.github.com/{owner}/{repo}"
                 );
 
                 //«десь у мен€ будет возвращатс€ обработанна€ инфа репозитори€
