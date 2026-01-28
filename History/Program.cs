@@ -12,12 +12,15 @@ app.MapGet("/getRepositoryGit/{owner}/{repo}", async (string owner, string repo)
     try
     {
         HttpResponseMessage result = await client.GetAsync($"https://api.github.com/repos/{owner}/{repo}");
-        if (!result.IsSuccessStatusCode) //ѕроверка на обработку запроса
+        HttpResponseMessage commitsResponse = await client.GetAsync($"https://api.github.com/repos/{owner}/{repo}/commits");
+
+        if (!result.IsSuccessStatusCode && !commitsResponse.IsSuccessStatusCode) //ѕроверка на обработку запроса
         {
             if (result.StatusCode != System.Net.HttpStatusCode.NotFound)//проверка на нахождение реозитори€
             {
                 string json = await result.Content.ReadAsStringAsync();
-
+                var commitsJson = await commitsResponse.Content.ReadAsStringAsync();
+                Dictionary<string, object> deserializeJsonCommits = JsonSerializer.Deserialize<Dictionary<string, object>>(commitsJson);
                 Dictionary<string, object> deserializeJson = JsonSerializer.Deserialize<Dictionary<string, object>>(json);
 
                 GitRepository repository = new GitRepository
@@ -27,7 +30,7 @@ app.MapGet("/getRepositoryGit/{owner}/{repo}", async (string owner, string repo)
                    Convert.ToInt32(deserializeJson["stargazers_count"] ?? 0),
                    DateOnly.Parse(deserializeJson["updated_at"]?.ToString()),
                    deserializeJson["language"]?.ToString() ?? "Unknown",
-                   new List<(DateTime, int)>() // ѕока пуста€, см. примечание ниже
+                   new List<(DateTime, int)>()
                 );
 
                 //«десь у мен€ будет возвращатс€ обработанна€ инфа репозитори€
