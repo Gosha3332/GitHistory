@@ -1,3 +1,4 @@
+using System;
 using System.Text.Json;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,7 +11,7 @@ app.MapGet("/getRepositoryGit/{owner}/{repo}", async (string owner, string repo)
     client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("token", token);
     try
     {
-        HttpResponseMessage result = await client.GetAsync($"https://api.github.com/{owner}/{repo}");
+        HttpResponseMessage result = await client.GetAsync($"https://api.github.com/repos/{owner}/{repo}");
         if (!result.IsSuccessStatusCode) //ѕроверка на обработку запроса
         {
             if (result.StatusCode != System.Net.HttpStatusCode.NotFound)//проверка на нахождение реозитори€
@@ -21,7 +22,12 @@ app.MapGet("/getRepositoryGit/{owner}/{repo}", async (string owner, string repo)
 
                 GitRepository repository = new GitRepository
                 (
-                    $"https://api.github.com/{owner}/{repo}"
+                   $"https://api.github.com/repos/{owner}/{repo}",
+                   deserializeJson["name"]?.ToString() ?? string.Empty,
+                   Convert.ToInt32(deserializeJson["stargazers_count"] ?? 0),
+                   DateOnly.Parse(deserializeJson["updated_at"]?.ToString()),
+                   deserializeJson["language"]?.ToString() ?? "Unknown",
+                   new List<(DateTime, int)>() // ѕока пуста€, см. примечание ниже
                 );
 
                 //«десь у мен€ будет возвращатс€ обработанна€ инфа репозитори€
